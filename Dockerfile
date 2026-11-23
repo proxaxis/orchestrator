@@ -89,7 +89,8 @@ RUN npm install -g puppeteer playwright @anthropic-ai/claude-code @google/gemini
 
 USER ubuntu
 RUN npx playwright install chromium \
-    && curl -fsSL https://cli.devin.ai/install.sh | bash
+    && (curl -fsSL https://cli.devin.ai/install.sh | bash || true) \
+    && /home/ubuntu/.local/bin/devin --version
 
 RUN echo "alias dvn='devin --permission-mode bypass'" >> /home/ubuntu/.bashrc \
     && echo "alias cld='claude --dangerously-skip-permissions'" >> /home/ubuntu/.bashrc \

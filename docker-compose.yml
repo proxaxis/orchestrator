@@ -1,0 +1,48 @@
+name: orchestrator_${USER_ROLE}
+
+services:
+  dind:
+    image: docker:27-dind
+    container_name: orchestrator_dind_${USER_ROLE}
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    ports:
+      - "${SSH_PORT}:22"
+    volumes:
+      - orchestrator_dind:/var/lib/docker
+      - orchestrator_home:/home/ubuntu
+    networks:
+      orchestrator_net:
+        ipv4_address: ${IPV4_ADDRESS}
+
+  agent:
+    image: orchestrator:latest
+    container_name: orchestrator_agent_${USER_ROLE}
+    depends_on:
+      - dind
+    network_mode: "service:dind"
+    tty: true
+    stdin_open: true
+    environment:
+      DOCKER_HOST: tcp://localhost:2375
+      SSH_PUBLIC_KEY: "${SSH_PUBLIC_KEY}"
+      GIT_USER_NAME: "${USER_ROLE}"
+      HOST_UID: "${HOST_UID}"
+      HOST_GID: "${HOST_GID}"
+    volumes:
+      - orchestrator_home:/home/ubuntu
+      - orchestrator_ssh:/etc/ssh
+
+volumes:
+  orchestrator_dind:
+  orchestrator_home:
+  orchestrator_ssh:
+
+networks:
+  orchestrator_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${SUBNET}
+          gateway: ${GATEWAY}
