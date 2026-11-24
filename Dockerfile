@@ -95,7 +95,7 @@ RUN npx playwright install chromium \
 RUN echo "alias dvn='devin --permission-mode bypass'" >> /home/ubuntu/.bashrc \
     && echo "alias cld='claude --dangerously-skip-permissions'" >> /home/ubuntu/.bashrc \
     && echo "alias gmn='gemini --yolo'" >> /home/ubuntu/.bashrc \
-    && echo "PS1='\[\e[32m\][CTR:\u] \[\e[94m\]\w \[\e[37m\]$ \[\e[0m\]'" >> /home/ubuntu/.bashrc
+    && echo "PS1='\[\e[31m\][VM] \[\e[94m\]\w \[\e[37m\]$ \[\e[0m\]'" >> /home/ubuntu/.bashrc
 
 USER root
 

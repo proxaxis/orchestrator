@@ -10,8 +10,8 @@ services:
     ports:
       - "${SSH_PORT}:22"
     volumes:
-      - orchestrator_dind:/var/lib/docker
-      - orchestrator_home:/home/ubuntu
+      - dind:/var/lib/docker
+      - home:/home/ubuntu
     networks:
       orchestrator_net:
         ipv4_address: ${IPV4_ADDRESS}
@@ -27,20 +27,23 @@ services:
     environment:
       DOCKER_HOST: tcp://localhost:2375
       SSH_PUBLIC_KEY: "${SSH_PUBLIC_KEY}"
-      GIT_USER_NAME: "${USER_ROLE}"
+      GIT_USER_NAME: "${GIT_USER_NAME}"
+      GIT_USER_EMAIL: "${GIT_USER_EMAIL}"
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
       HOST_UID: "${HOST_UID}"
       HOST_GID: "${HOST_GID}"
     volumes:
-      - orchestrator_home:/home/ubuntu
-      - orchestrator_ssh:/etc/ssh
+      - home:/home/ubuntu
+      - ssh:/etc/ssh
 
 volumes:
-  orchestrator_dind:
-  orchestrator_home:
-  orchestrator_ssh:
+  dind:
+  home:
+  ssh:
 
 networks:
   orchestrator_net:
+    name: orchestrator_net_${USER_ROLE}
     driver: bridge
     ipam:
       config:
