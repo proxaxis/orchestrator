@@ -15,6 +15,7 @@ services:
     networks:
       orchestrator_net:
         ipv4_address: ${IPV4_ADDRESS}
+    restart: always
 
   agent:
     image: orchestrator:latest
@@ -35,6 +36,7 @@ services:
     volumes:
       - home:/home/ubuntu
       - ssh:/etc/ssh
+    restart: always
 
 volumes:
   dind:
